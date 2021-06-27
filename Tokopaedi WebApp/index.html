@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOKOPAEDI Web App</title>
+</head>
+<body>
+    <h1>TOKOPAEDI Web App</h1>
+    <ul class="product-list">
+        <li>Loading Product From API ...</li>
+    </ul>
+</body>
+</html>
+
+<script>
+    // window.fetch --> browser API buat request ke API server
+    var loadData = async () => {
+        var response = await window.fetch('http://localhost:3000/products');
+        var products = await response.json();
+
+        var productListContainer = document.querySelector('.product-list');
+
+        var productItemsFragment = '';
+
+        for (var product of products){
+            // back tick (yang sebelah angka 1) --> string literal
+            productItemsFragment += `
+            <li>
+                <div>
+                    <h2>${product.name}</h2>
+                    <p>${product.price}</p>
+                </div>
+            </li>
+            `;
+        }
+
+        productListContainer.innerHTML = productItemsFragment;
+    }
+
+    // only runs this func when DOM / page is ready / page is fully loaded
+    window.addEventListener('DOMContentLoaded', () => {
+        loadData();
+    })
+</script>
