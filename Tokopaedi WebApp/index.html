@@ -11,6 +11,17 @@
     <ul class="product-list">
         <li>Loading Product From API ...</li>
     </ul>
+
+    <div>
+        <h2>Form Insert New Product</h2>
+        <form id="product-form">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br>
+            <label for="price">Price:</label><br>
+            <input type="text" id="price" name="price"><br><br>
+            <button type="submit">Tambah Produk Baru</button>
+        </form>
+    </div>
 </body>
 </html>
 
@@ -41,6 +52,41 @@
 
     // only runs this func when DOM / page is ready / page is fully loaded
     window.addEventListener('DOMContentLoaded', () => {
+        loadData();
+    })
+
+    var formContainer = document.querySelector('#product-form');
+
+    formContainer.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        var productFormElements = event.target.elements;
+
+        var newProductData = {};
+
+        for (var formInput of productFormElements){
+            if (formInput.name){
+                newProductData[formInput.name] = formInput.value;
+            }
+        }
+
+        newProductData.price = Number(newProductData.price);
+
+        // Communicate with server / rest api
+        await window.fetch('http://localhost:3000/products', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newProductData)
+        });
+
+        for (const formInput of productFormElements) {
+            formInput.value = '';
+        }
+
+        document.querySelector('.product-list').innerHTML = '<li>Loading Product From API ...</li>';
+
         loadData();
     })
 </script>

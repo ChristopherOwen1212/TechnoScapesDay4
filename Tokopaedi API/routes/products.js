@@ -3,6 +3,8 @@ var router = express.Router();
 
 // BARU DI COPAS DARI PROJECT DAY - 1
 const ProductRepository = require('../repositories/product');
+var auth = require('../middlewares/auth')
+router.use(auth);
 
 router.get('/', async (req, res) => {
   const allProducts = await ProductRepository.findAll();
